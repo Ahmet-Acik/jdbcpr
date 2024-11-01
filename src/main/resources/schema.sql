@@ -18,6 +18,8 @@
 --
 -- Table structure for table `countries`
 --
+CREATE DATABASE IF NOT EXISTS `hr_data`;
+USE `hr_data`;
 
 DROP TABLE IF EXISTS `countries`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

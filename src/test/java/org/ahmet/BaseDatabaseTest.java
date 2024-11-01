@@ -19,6 +19,8 @@ public abstract class BaseDatabaseTest {
 
     @BeforeEach
     public void setUp() throws SQLException {
+        DatabaseConfigUtil.createDatabaseIfNotExists();
+        DatabaseConfigUtil.executeSchema();
         databaseName = DatabaseConfigUtil.getDatabaseName();
         if (databaseName == null || databaseName.isEmpty()) {
             throw new SQLException("Database name is not set or is empty");

@@ -1,19 +1,33 @@
 package org.ahmet;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.ahmet.DatabaseConfigUtil.getDatabaseName;
+
 public class TablePropertiesTest extends BaseDatabaseTest {
 
+    @BeforeAll
+    public static void init() {
+        DatabaseConfigUtil.createDatabaseIfNotExists();
+        DatabaseConfigUtil.executeSchema();
+
+    }
+
     @BeforeEach
-    public void init() {
-        setDatabaseName(DatabaseConfigUtil.getDatabaseName());
+    public void setUp() throws SQLException {
+        setDatabaseName(getDatabaseName());
+        String username = DatabaseConfigUtil.getUsername();
+        String password = DatabaseConfigUtil.getPassword();
+        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + getDatabaseName(), username, password);
     }
 
     @Test
@@ -109,7 +123,7 @@ public class TablePropertiesTest extends BaseDatabaseTest {
     @Test
     public void testGetTableNamesAndProperties() throws SQLException {
         DatabaseMetaData metaData = connection.getMetaData();
-        String databaseName = DatabaseConfigUtil.getDatabaseName();
+        String databaseName = getDatabaseName();
         try (ResultSet tables = metaData.getTables(databaseName, null, "%", new String[]{"TABLE"})) {
 
             while (tables.next()) {
